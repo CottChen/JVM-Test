@@ -36,8 +36,10 @@ public class JVMTest {
 		Field unsafeField = Unsafe.class.getDeclaredFields()[0];
 		unsafeField.setAccessible(true);
 		Unsafe unsafe = (Unsafe) unsafeField.get(null);
+		int i = 0;
 		while (true) {
-			System.out.println("allocate memory...");
+			i++;
+			System.out.println("allocate memory=" + i + "M");
 			// unsafe直接想操作系统申请内存
 			unsafe.allocateMemory(_1MB);
 		}

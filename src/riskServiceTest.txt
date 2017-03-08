@@ -1,0 +1,36 @@
+
+	
+	public static void main (String [] args) {
+		RuleExecSerialServiceImpl r = new RuleExecSerialServiceImpl();
+		TestZkClient testNamiZkClient = r.new TestZkClient();
+		testNamiZkClient.test001();
+	}
+	
+	public class TestZkClient {
+		private NamiZkClient testNamiZkClient = new NamiZkClient();
+		
+		public TestZkClient(){
+			testNamiZkClient.setZkAddress("zk:2181");
+			testNamiZkClient.initClient();
+		}
+		
+		public NamiZkClient getNamiZkClient(){
+			return this.testNamiZkClient;
+		}
+		
+		public void test001(){
+			int i = 0;
+			while (true) {
+				i ++;
+				System.out.println("create listener "+i);
+				NamiZKListener listener = new NamiZKListener() {
+					@Override
+					public void invoke(NamiZKEvent event) {
+						System.out.println("get change");
+					}
+				};
+				testNamiZkClient.watchNodeChange("/nami/risk", listener);
+				testNamiZkClient.removeWatch(listener);
+			}
+		}
+	}
